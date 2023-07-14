@@ -1,0 +1,28 @@
+.reset-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    gap: 10px;
+    box-shadow: 1px 1px 40px #ddd;
+    padding: 30px 60px;
+    border-radius: 10px;
+}
+
+.reset-form input{
+    padding: 8px;
+    border: 1px solid dodgerblue;
+    outline: none;
+    font-size: 18px;
+    border-radius: 8px;
+}
+
+.reset-form span{
+    position: absolute;
+    right: 7px;
+    top: 110px;
+}
