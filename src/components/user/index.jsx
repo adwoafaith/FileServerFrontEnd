@@ -100,7 +100,7 @@ const Dashboard = () => {
                                     <span>{file.description}</span>
                                     <div className='file-image'>
                                         <div className='image'>
-                                            <img src={`${file.file_url}`} alt="" />
+                                            <img src={`${file.file_url ||'https://res.cloudinary.com/dxclgkewn/image/upload/f_auto,q_auto/v1/file_server/feezcpqify1zmxjxs82i'}`} alt="" />
                                         </div>
                                         <span className="spanner" onClick={() => showAction(!action)}>Action</span>
                                         <div className={`actions ${action ? 'show' : ''}`}>

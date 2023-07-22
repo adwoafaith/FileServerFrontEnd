@@ -8,6 +8,7 @@ const SignupPage = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
+    //50053c
 
     const handleSignUp = async (e) => {
         
@@ -15,10 +16,14 @@ const SignupPage = () => {
         console.log(password)
         e.preventDefault();
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup`, {email, password})
+            //const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup`, {email, password})
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/verify`, {email})
+            if (response.status===200){
+                localStorage.setItem('data',JSON.stringify({email,password,token:response.data.token}))
+            }
             console.log(response)
              alert(response.data.message)
-             navigate('/login')
+             navigate('/verify')
          } catch (error) {
              alert(error.response.data.message )
          }
