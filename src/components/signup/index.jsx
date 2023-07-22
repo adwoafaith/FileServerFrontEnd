@@ -10,23 +10,26 @@ const SignupPage = () => {
     const navigate = useNavigate()
     //50053c
 
+    const emailMatch = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    const passwordMatch =/^(?=.[!@#$%^&()\-_=+{};:,<.>§~|\\/[\]])(?=.[A-Z])(?=.[a-z]).{8,}$/
     const handleSignUp = async (e) => {
-        
-        console.log(email)
-        console.log(password)
         e.preventDefault();
-        try {
-            //const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup`, {email, password})
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/verify`, {email})
+        return !email.match(emailMatch) ? alert("please provide a valid email"):
+        !password.match(passwordMatch) ? alert("please use a mininum of one uppercase,lowercase,number and a symbol"):
+    
+        (axios.post(`${process.env.REACT_APP_BASE_URL}/user/verify`, {email})
+        .then((response)=>{
             if (response.status===200){
                 localStorage.setItem('data',JSON.stringify({email,password,token:response.data.token}))
+                alert(response.data.message)
+                 navigate('/verify')
             }
-            console.log(response)
-             alert(response.data.message)
-             navigate('/verify')
-         } catch (error) {
-             alert(error.response.data.message )
-         }
+        })
+            //const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/signup`, {email, password})
+        .catch((error)=>{
+             alert(error.response.data.message)
+             console.log(error)
+        }))
     }
     
     return(

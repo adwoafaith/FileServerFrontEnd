@@ -3,8 +3,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './style.css'
 import { useNavigate } from 'react-router-dom';
+import pdfImage from '../../assets/image.jpeg'
 
-const Dashboard = () => {
+const User = () => {
     const navigate = useNavigate()
     const [files, setFiles] = useState([])
     const [fullScreenImage, setFullScreenImage] = useState(false);
@@ -26,7 +27,7 @@ const Dashboard = () => {
             .then(res => {
                 setFiles(res.data.response.reverse())
             })
-            .catch(err => console.error(err))
+            .catch(error => alert(error.message))
     }, [files])
 
     const handleShare = (url, id) => {
@@ -60,7 +61,7 @@ const Dashboard = () => {
                 alert(res.data.message)
                 setReciepient('')
             })
-            .catch(err => console.error(err))
+            .catch(error => alert(error.message))
     }
 
     const handleDownload = async (id, file) => {
@@ -77,8 +78,8 @@ const Dashboard = () => {
                 }
             })
 
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            alert(error.message)
         }
     }
     return (
@@ -100,18 +101,17 @@ const Dashboard = () => {
                                     <span>{file.description}</span>
                                     <div className='file-image'>
                                         <div className='image'>
-                                            <img src={`${file.file_url ||'https://res.cloudinary.com/dxclgkewn/image/upload/f_auto,q_auto/v1/file_server/feezcpqify1zmxjxs82i'}`} alt="" />
+                                            <img src={`${file.format === 'pdf' ? pdfImage : file.file_url}`} alt="" />
                                         </div>
                                         <span className="spanner" onClick={() => showAction(!action)}>Action</span>
                                         <div className={`actions ${action ? 'show' : ''}`}>
                                             <button onClick={() => handlePreview(file.file_url)} style={{ cursor: 'pointer' }}>Preview</button>
                                             <button onClick={() => handleShare(file.file_url, file._id)} style={{ cursor: 'pointer' }}>
                                                 Share
-                                                <span className='count shares'>{file.emailCount}</span>
+                                        
                                             </button>
                                             <button onClick={() => handleDownload(file._id, file.file_url)} style={{ cursor: 'pointer' }} >
                                                 Download
-                                                <span className='count downloads'>{file.downloadCount}</span>
                                             </button>
                                         </div>
                                     </div>
@@ -150,4 +150,4 @@ const Dashboard = () => {
     );
 }
 
-export default Dashboard
+export default User

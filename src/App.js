@@ -17,7 +17,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/user" element={<User />} />
                 <Route path="/resetPassword/:id" element={<ResetPassword />} />
-                <Route path="/verify" element={<VerifyCode/>}></Route>
+                <Route path="/verify" element={<VerifyCode />}></Route>
             </Routes>
         </BrowserRouter>
     );

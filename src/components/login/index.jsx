@@ -15,18 +15,21 @@ const LoginPage = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, { email, password })
-            alert(response.data.message)
-            localStorage.setItem('token', response.data.token)
-            localStorage.setItem('role', response.data.role)
+             axios.post(`${process.env.REACT_APP_BASE_URL}/user/login`, { email, password })
+            .then((response)=>{
 
-            if (localStorage.getItem('role') === 'admin') navigate('/dashboard')
-            if (localStorage.getItem('role') === 'user') navigate('/user')
-
-        } catch (error) {
-            alert(error.message)
-        }
+                alert(response.data.message)
+                localStorage.setItem('token', response.data.token)
+                localStorage.setItem('role', response.data.role)
+    
+                if (localStorage.getItem('role') === 'admin') navigate('/dashboard')
+                if (localStorage.getItem('role') === 'user') navigate('/user')
+                
+            })
+            .catch ((error)=>{
+                 alert(error.response.data.message)
+                 console.log(error)
+            })
     }
 
     const handleForgot = () => {
