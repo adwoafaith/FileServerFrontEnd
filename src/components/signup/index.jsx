@@ -15,7 +15,7 @@ const SignupPage = () => {
     const handleSignUp = async (e) => {
         e.preventDefault();
         return !email.match(emailMatch) ? alert("please provide a valid email"):
-        !password.match(passwordMatch) ? alert("please use a mininum of one uppercase,lowercase,number and a symbol"):
+        password.match(passwordMatch) ? alert("please use a mininum of one uppercase,lowercase,number and a symbol"):
     
         (axios.post(`${process.env.REACT_APP_BASE_URL}/user/verify`, {email})
         .then((response)=>{
