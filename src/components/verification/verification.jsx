@@ -12,6 +12,7 @@ const VerifyCode = () => {
 
     useEffect(()=>{
         setData(JSON.parse(localStorage.getItem('data')))
+        console.log(data)
     },[])
 
     const handleVerification = (e) => {
