@@ -90,6 +90,11 @@
   align-items: center;
   z-index: 9999;
 }
+.fullscreen-pdf {
+    max-width: 80%;
+    max-height: 80%;
+    border: none;
+}
 
 .fullscreen-image {
   max-width: 100%;

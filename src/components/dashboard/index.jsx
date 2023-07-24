@@ -10,6 +10,7 @@ const Dashboard = () => {
     const navigate = useNavigate()
     const [files, setFiles] = useState([])
     const [fullScreenImage, setFullScreenImage] = useState(false);
+    const [fullScreenPdf, setFullScreenPdf] = useState(false);
     const [shareScreen, setshareScreen] = useState(false);
     const [reciepient, setReciepient] = useState('');
     const [imageUrl, setImageUrl] = useState('');
@@ -62,10 +63,19 @@ const Dashboard = () => {
         setshareScreen(!shareScreen)
     }
 
-    const handlePreview = (url) => {
-        setImageUrl(url)
-        setFullScreenImage(true)
-    }
+    const handlePreview = (url, format) => {
+        if (format === 'pdf') {
+            // For PDFs, set the PDF file URL directly
+             console.log('URL:', url);
+            console.log('Format:', format);
+            setImageUrl(url);
+            setFullScreenPdf(true); // Add a new state for full-screen PDF preview
+        } else {
+            // For images and other formats, set the regular image URL
+            setImageUrl(url);
+            setFullScreenImage(true);
+        }
+    };
 
 
     const handleLogout = () => {
@@ -90,24 +100,37 @@ const Dashboard = () => {
             .catch(err => console.error(err))
     }
 
-    const handleDownload = async (id, file) => {
+   
+const handleDownload = async (id, file, format) => {
+    if (format === 'pdf') {
+        // For PDFs, set the download link as the PDF URL directly
         const link = document.createElement('a');
-        link.href = file
-        link.download = `imagefile.${file.split('.')[1]}`
-        link.click()
-
+        link.href = file;
+        link.download = `pdffile.pdf`; // You can customize the downloaded PDF file name
+        link.click();
+    } else {
+        // For other formats, make an API call to fetch the file for download
         try {
             await axios.get(`${process.env.REACT_APP_BASE_URL}/file/download/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Accept': 'application/json'
-                }
-            })
-
+                },
+                responseType: 'blob', // Set the response type to 'blob' to handle binary data
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `imagefile.${file.split('.')[1]}`;
+                link.click();
+            });
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
+};
+
+
     return (
         <>
             <button className='logout' onClick={handleLogout}>Logout</button>
@@ -140,6 +163,7 @@ const Dashboard = () => {
                                         <div className='file-image'>
                                             <div className='image'>
                                                 <img src={`${file.format === 'pdf' ? pdfImage : file.file_url}`} alt="" />
+                                                
                                             </div>
                                             <span className="spanner" onClick={() => showAction(!action)}>Action</span>
                                             <div className={`actions ${action ? 'show' : ''}`}>
@@ -191,4 +215,4 @@ const Dashboard = () => {
     );
 }
 
-export default Dashboard;
+export default Dashboard
