@@ -101,9 +101,8 @@ const User = () => {
                                     <span>{file.description}</span>
                                     <div className='file-image'>
                                         <div className='image'>
-                                            <iframe title='PDF preview' src={`${file.format === 'pdf' ? pdfImage : file.file_url}`} alt="" />
+                                            <img src={`${file.format === 'pdf' ? pdfImage : file.file_url}`} alt="" />
                                         </div>
-                                        
                                         <span className="spanner" onClick={() => showAction(!action)}>Action</span>
                                         <div className={`actions ${action ? 'show' : ''}`}>
                                             <button onClick={() => handlePreview(file.file_url)} style={{ cursor: 'pointer' }}>Preview</button>
