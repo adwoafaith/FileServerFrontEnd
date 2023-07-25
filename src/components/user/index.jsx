@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import './style.css'
 import { useNavigate } from 'react-router-dom';
 import pdfImage from '../../assets/image.jpeg'
+import videoImage from '../../assets/video.avif';
+import audioImage from '../../assets/audio.jpg';
 
 const User = () => {
     const navigate = useNavigate()
@@ -64,24 +66,35 @@ const User = () => {
             .catch(error => alert(error.message))
     }
 
-    const handleDownload = async (id, file) => {
-        const link = document.createElement('a');
-        link.href = file
-        link.download = `imagefile.${file.split('.')[1]}`
-        link.click()
 
-        try {
-            await axios.get(`${process.env.REACT_APP_BASE_URL}/file/download/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Accept': 'application/json'
-                }
-            })
-
-        } catch (error) {
-            alert(error.message)
-        }
+     const handleDownload = async (id, file, format) => {
+    if (format === 'pdf') {
+      // For PDFs, set the download link as the PDF URL directly
+      const link = document.createElement('a');
+      link.href = file;
+      link.download = `pdffile.pdf`; // You can customize the downloaded PDF file name
+      link.click();
+    } else {
+      // For other formats, make an API call to fetch the file for download
+      try {
+        await axios.get(`${process.env.REACT_APP_BASE_URL}/file/download/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Accept': 'application/json'
+          },
+          responseType: 'blob', // Set the response type to 'blob' to handle binary data
+        }).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `file.${file.split('.')[1]}`;
+          link.click();
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
+  };
     return (
         <>
             <button className='logout' onClick={handleLogout}>Logout</button>
@@ -101,7 +114,11 @@ const User = () => {
                                     <span>{file.description}</span>
                                     <div className='file-image'>
                                         <div className='image'>
-                                            <img src={`${file.format === 'pdf' ? pdfImage : file.file_url}`} alt="" />
+                                                {file.format === 'pdf' && <img src = {pdfImage} alt=''/>}
+                                                {file.format === 'video' && <img src = {videoImage} alt=''/>}
+                                                {file.format === 'mp4' && <img src = {audioImage} alt=''/>}
+                                                {file.format !== 'pdf' && file.format !== 'mp4' && ( <img src={file.file_url} alt="" />)}
+                                             
                                         </div>
                                         <span className="spanner" onClick={() => showAction(!action)}>Action</span>
                                         <div className={`actions ${action ? 'show' : ''}`}>
